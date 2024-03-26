@@ -5,6 +5,7 @@ from sys import exit
 from player import Player
 from support import *
 
+
 class Game:
     def __init__(self):
         self.width = WIDTH  # Width of display surface
