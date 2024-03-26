@@ -2,12 +2,7 @@
 import pygame
 from sys import exit
 from player import Player
-
-# CONSTANTS
-WIDTH = 400  # Width of display surface
-HEIGHT = 600  # Height of display surface
-TITLE = "Jumpy"  # Title of display
-FPS = 60  # Framerate
+from support import *
 
 
 class Game:
@@ -47,7 +42,7 @@ class Game:
 
     def update(self):
         # Any game logic updates would go here
-        pass
+        self.jumpy.move()
 
     def render(self):
         # Any rendering/drawing updates would go here
