@@ -1,8 +1,6 @@
 # IMPORT LIBRARIES
 import pygame
-
 from support import *
-
 
 
 class Player:
@@ -59,4 +57,3 @@ class Player:
         # this third version will flip the image with the boolean of self.flip
         _screen.blit(pygame.transform.flip(self.image, self.flip, False), (self.rect.x - 12, self.rect.y - 5))  # more tweaking on collision box
         pygame.draw.rect(_screen, WHITE, self.rect, 2)
-
