@@ -18,7 +18,7 @@ class Player:
         self.vel_y = 0
         self.flip = False
 
-    def move(self):
+    def move(self, p_group):
         # reset variables at beginning of every frame
         dx = 0
         dy = 0
@@ -41,6 +41,18 @@ class Player:
             dx = 0 - self.rect.left
         if self.rect.right + dx > WIDTH:
             dx = WIDTH - self.rect.right
+
+        # check collisions with platforms
+        for platform in p_group:
+            # collision with y direction
+            if platform.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                # check if above platform
+                if self.rect.bottom < platform.rect.centery:
+                    # check if he is jumping or falling
+                    if self.vel_y > 0:
+                        self.rect.bottom = platform.rect.top
+                        dy = 0
+                        self.vel_y = -20
 
         # check collision with ground
         if self.rect.bottom + dy > HEIGHT:
