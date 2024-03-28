@@ -22,6 +22,7 @@ class Player:
         # reset variables at beginning of every frame
         dx = 0
         dy = 0
+        _scroll = 0
 
         # process keypresses
         key = pygame.key.get_pressed()
@@ -59,9 +60,17 @@ class Player:
             dy = 0
             self.vel_y = -20
 
+        # check if the player has bounced to the top of the screen
+        if self.rect.top <= SCROLL_THRESH:
+            # only if player is jumping
+            if self.vel_y < 0:
+                _scroll = -dy
+
         # update rectangle position
         self.rect.x += dx
-        self.rect.y += dy
+        self.rect.y += dy + _scroll
+
+        return _scroll
 
     def render(self, _screen):
         # _screen.blit(self.image, self.rect) usual way, but we are tweaking the collision box

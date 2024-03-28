@@ -14,6 +14,8 @@ class Game:
         self.height = HEIGHT  # Height of display surface
         self.title = TITLE  # Title of display
         self.fps = FPS  # Framerate
+        self.scroll = scroll
+        self.bg_scroll = bg_scroll
 
         # START PYGAME
         pygame.init()
@@ -49,6 +51,11 @@ class Game:
             self.render()
             self.clock.tick(self.fps)
 
+    # FUNCTION FOR DRAWING SCROLLING BACKGROUND
+    def draw_bg(self, _bg_scroll):
+        self.screen.blit(self.bg_image, (0, 0 + _bg_scroll))
+        self.screen.blit(self.bg_image, (0, 0 - self.height + _bg_scroll))
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,12 +63,21 @@ class Game:
 
     def update(self):
         # Any game logic updates would go here
-        self.jumpy.move(self.platform_group)
+        self.scroll = self.jumpy.move(self.platform_group)
+
+        # update platforms for scrolling
+        self.platform_group.update(self.scroll)
 
     def render(self):
         # Any rendering/drawing updates would go here
         # DRAW BACKGROUND
-        self.screen.blit(self.bg_image, (0, 0))
+        self.bg_scroll += self.scroll
+        if self.bg_scroll >= 600:
+            self.bg_scroll = 0
+        self.draw_bg(self.bg_scroll)
+
+        # DRAW TEMPORARY SCROLL THRESHOLD
+        pygame.draw.line(self.screen, WHITE, (0, SCROLL_THRESH), (WIDTH, SCROLL_THRESH))
 
         # DRAW PLAYER
         self.jumpy.render(self.screen)
