@@ -1,4 +1,5 @@
 import pygame
+from support import HEIGHT
 
 
 class Platform(pygame.sprite.Sprite):
@@ -13,3 +14,7 @@ class Platform(pygame.sprite.Sprite):
     def update(self, scroll):
         # update platforms vertical position
         self.rect.y += scroll
+
+        # check if platform has gone off the screen
+        if self.rect.top > HEIGHT:
+            self.kill()

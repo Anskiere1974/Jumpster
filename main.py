@@ -36,13 +36,9 @@ class Game:
         # CREATE SPRITE GROUPS
         self.platform_group = pygame.sprite.Group()
 
-        # CREATE TEMPORARY PLATFORMS - The first 10
-        for p in range(MAX_PLATFORMS):
-            p_w = random.randint(40, 60)  # random platform width
-            p_x = random.randint(0, WIDTH - p_w)  # random x of platform (0, Width - platform width)
-            p_y = p * random.randint(80, 120)
-            platform = Platform(p_x, p_y, p_w)
-            self.platform_group.add(platform)
+        # CREATE STARTING PLATFORM
+        platform = Platform(self.width // 2 - 50, self.height - 50, 100)
+        self.platform_group.add(platform)
 
     def run(self):
         while True:
@@ -65,6 +61,14 @@ class Game:
         # Any game logic updates would go here
         self.scroll = self.jumpy.move(self.platform_group)
 
+        # generate platforms
+        if len(self.platform_group) < MAX_PLATFORMS:
+            p_w = random.randint(40, 60)
+            p_x = random.randint(0, self.width - p_w)
+            p_y = self.platform_group.sprites()[-1].rect.y - random.randint(80, 120)
+            platform = Platform(p_x, p_y, p_w)
+            self.platform_group.add(platform)
+
         # update platforms for scrolling
         self.platform_group.update(self.scroll)
 
@@ -75,9 +79,6 @@ class Game:
         if self.bg_scroll >= 600:
             self.bg_scroll = 0
         self.draw_bg(self.bg_scroll)
-
-        # DRAW TEMPORARY SCROLL THRESHOLD
-        pygame.draw.line(self.screen, WHITE, (0, SCROLL_THRESH), (WIDTH, SCROLL_THRESH))
 
         # DRAW PLAYER
         self.jumpy.render(self.screen)
