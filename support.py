@@ -10,6 +10,10 @@ MAX_PLATFORMS = 10
 SCROLL_THRESH = 200
 scroll = 0
 bg_scroll = 0
+game_over = False
+score = 0
 
 # DEFINE COLORS
 WHITE = (255, 255, 255)
+
+

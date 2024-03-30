@@ -55,11 +55,6 @@ class Player:
                         dy = 0
                         self.vel_y = -20
 
-        # check collision with ground
-        if self.rect.bottom + dy > HEIGHT:
-            dy = 0
-            self.vel_y = -20
-
         # check if the player has bounced to the top of the screen
         if self.rect.top <= SCROLL_THRESH:
             # only if player is jumping

@@ -16,6 +16,8 @@ class Game:
         self.fps = FPS  # Framerate
         self.scroll = scroll
         self.bg_scroll = bg_scroll
+        self.game_over = game_over
+        self.score = score
 
         # START PYGAME
         pygame.init()
@@ -30,6 +32,10 @@ class Game:
         # LOAD IMAGES
         self.bg_image = pygame.image.load("assets/bg.png").convert_alpha()
 
+        # DEFINE FONTS
+        self.font_small = pygame.font.SysFont("Lucida Sans", 20)
+        self.font_big = pygame.font.SysFont("Lucida Sans", 24)
+
         # INITIALIZE PLAYER
         self.jumpy = Player(self.width // 2, self.height - 150)
 
@@ -43,9 +49,43 @@ class Game:
     def run(self):
         while True:
             self.handle_events()
-            self.update()
-            self.render()
             self.clock.tick(self.fps)
+
+            if not self.game_over:
+                self.update()
+                self.render()
+            else:
+                print("Hello")
+                self.draw_text("GAME OVER!", self.font_big, WHITE, 130, 200)
+                self.draw_text("SCORE: " + str(self.score), self.font_big, WHITE, 130, 250)
+                self.draw_text("PRESS SPACE TO PLAY AGAIN", self.font_big, WHITE, 40, 300)
+                self.restart_game()
+
+                # UPDATE DISPLAY
+                pygame.display.update()
+
+    def restart_game(self):
+        key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+            # reset variables
+            self.game_over = False
+            self.score = 0
+            self.scroll = 0
+
+            # reposition jumpy
+            self.jumpy.rect.center = (self.width // 2, self.height - 150)
+
+            # reset platforms
+            self.platform_group.empty()
+
+            # CREATE STARTING PLATFORM
+            platform = Platform(self.width // 2 - 50, self.height - 50, 100)
+            self.platform_group.add(platform)
+
+    # OUTPUTTING TEXT ON THE SCREEN
+    def draw_text(self, text, font, text_col, x, y):
+        img = font.render(text, True, text_col)
+        self.screen.blit(img, (x, y))
 
     # FUNCTION FOR DRAWING SCROLLING BACKGROUND
     def draw_bg(self, _bg_scroll):
@@ -71,6 +111,10 @@ class Game:
 
         # update platforms for scrolling
         self.platform_group.update(self.scroll)
+
+        # check for game over
+        if self.jumpy.rect.top > self.height:
+            self.game_over = True
 
     def render(self):
         # Any rendering/drawing updates would go here
